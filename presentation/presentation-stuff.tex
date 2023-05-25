@@ -1,0 +1,463 @@
+\documentclass[landscape]{article}
+\usepackage{cmbright}
+\usepackage[margin=1cm]{geometry}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{tikz}
+%\usetikzlibrary{automata,positioning, shapes.geometric, bending, calc}
+\usetikzlibrary{automata,positioning, shapes.geometric, bending, calc, external}
+\tikzexternalize
+\tikzset{external/force remake}
+\definecolor{loc}{rgb}{0.06667, 0.46667, 0.20000}
+\definecolor{diff}{rgb}{0.53333, 0.80000, 0.93333}
+\definecolor{serv}{rgb}{0.80000, 0.40000, 0.46667}
+\definecolor{time}{rgb}{0.53333, 0.13333, 0.33333}
+
+
+\begin{document}
+
+{\huge{$\mathcal{M} = \left<S,A,T,R\right>$}}
+
+$s=(v_i=2, l_1=1, l_2=0, l_3=0,d_i=2,\tau=5)$
+
+{\Huge{$s=(\textcolor{loc}{v}, \textcolor{serv}{l_1, l_2, l_3},\textcolor{diff}{d},\textcolor{time}{\tau})$}}
+
+{\Huge{$s=(\textcolor{loc}{v}, \textcolor{serv}{l_1, \cdots, l_n},\textcolor{diff}{d},\textcolor{time}{\tau})$}}
+
+% nodes only
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+    \path[->]
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% nodes with state s0 described
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0)
+  {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \node (texts0) [below left=3 and 2 of s_0] {\large{$s_0=(\textcolor{loc}{v=3}, \textcolor{serv}{l_1=2, l_2=1, l_3=0},\textcolor{diff}{d=1},\textcolor{time}{\tau=15})$}};
+
+    \path[->]
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+    \draw[->, >=latex, blue!20!white, line width=3pt] (s_0) to[out=-90, in=90, smooth] (texts0);
+\end{tikzpicture}
+
+% nodes and edge action
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  % don't draw the chance nodes yet
+  \node[chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[chance] (a1_chance) [above right=3 and 2 of s_1] {};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge                       node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% nodes and edge action with reward label
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  % don't draw the chance nodes yet
+  \node[chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[chance] (a1_chance) [above right=3 and 2 of s_1] {};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge                       node[name=a_e]        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+
+  \node (a_e_reward) [above right=1 and 3 of a_e] {No reward};
+  \draw[->, >=latex, blue!20!white, line width=3pt] (a_e) to[out=0, in=180,smooth] (a_e_reward);
+
+\end{tikzpicture}
+
+% nodes and both actions
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  % don't draw the chance nodes yet
+  \node[chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[chance] (a1_chance) [above right=3 and 2 of s_1] {};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% nodes and both actions, service action labelled
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  % don't draw the chance nodes yet
+  \node[chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[chance] (a1_chance) [above right=3 and 2 of s_1] {};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [name=a_l, swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+  \node (a_l_reward) [above left=1.8 and 2 of a_l, text width=4cm] {Reward based on current node's service level};
+  \draw[->, >=latex, blue!20!white, line width=3pt] (a_l) to[out=180, in=-90,smooth] (a_l_reward);
+                  
+\end{tikzpicture}
+
+% nodes, actions and chance
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  % draw the chance nodes
+  \node[draw,chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap]  {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node         {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% nodes, actions, chance nodes, transition for edge action
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+  \node (texts4) [below left=3 and 2 of s_0] {\large{$s_4=(\textcolor{loc}{v=2}, \textcolor{serv}{l_1=2, l_2=1, l_3=0},\textcolor{diff}{d=0},\textcolor{time}{\tau=18})$}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a2_chance) edge              node              {$\begin{aligned}0.5:\textcolor{loc}{v}&\textcolor{loc}{=2}\\ \textcolor{diff}{d}&\textcolor{diff}{=0}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+3}\end{aligned}$} (s_4)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+
+  \draw[->, >=latex, blue!20!white, line width=3pt] (s_4) to[out=180, in=0, smooth] (texts4);
+\end{tikzpicture}
+
+% nodes, actions, chance nodes, transition for edge action
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a2_chance) edge              node   [pos=0.8]           {$\begin{aligned}0.5:\textcolor{loc}{v}&\textcolor{loc}{=2}\\ \textcolor{diff}{d}&\textcolor{diff}{=0}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+3}\end{aligned}$} (s_4)
+            (a2_chance) edge              node   [swap, pos=0.8]     {$\begin{aligned}0.5:\textcolor{loc}{v}&\textcolor{loc}{=2}\\ \textcolor{diff}{d}&\textcolor{diff}{=1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+3}\end{aligned}$} (s_3)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% nodes, actions, chance nodes, transition for edge action
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state, gray!40] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state, gray!40] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance,gray!40] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+%            (a2_chance) edge [gray!40]             node   [pos=0.8]           {$\begin{aligned}\textcolor{gray!40}{0.5:v}&\textcolor{gray!40}{=2}\\ \textcolor{gray!40}{d}&\textcolor{gray!40}{=0}\\ \textcolor{gray!40}{\tau}&\textcolor{gray!40}{=\tau+3}\end{aligned}$} (s_4)
+%            (a2_chance) edge [gray!40]              node   [swap, pos=0.8]     {$\begin{aligned}\textcolor{gray!40}{0.5:v}&\textcolor{gray!40}{=2}\\ \textcolor{gray!40}{d}&\textcolor{gray!40}{=1}\\ \textcolor{gray!40}{\tau}&\textcolor{gray!40}{=\tau+3}\end{aligned}$} (s_3)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_4)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_3)                    
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% transition for service action
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state, gray!40] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state, gray!40] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance,gray!40] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a1_chance) edge              node [swap, pos=0.8] {$\begin{aligned}0.3:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+2}\end{aligned}$} (s_1)                  
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_4)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_3)                    
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% service action with state labelled
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state, gray!40] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state, gray!40] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance,gray!40] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a1_chance) edge              node [swap, pos=0.8] {$\begin{aligned}0.3:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+2}\end{aligned}$} (s_1)                  
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_4)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_3)                    
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+  \node (texts1) [fill=white, above=1.5 of s_3] {\large{$s_1=(\textcolor{loc}{v=3}, \textcolor{serv}{l_1=2, l_2=1, l_3=1},\textcolor{diff}{d=2},\textcolor{time}{\tau=17})$}};
+  \draw[->, >=latex, blue!20!white, line width=3pt] (s_1) to[out=0, in=-150] (texts1);            
+
+\end{tikzpicture}
+
+% service action both branches
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state, gray!40] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state, gray!40] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance,gray!40] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a1_chance) edge              node [swap, pos=0.8] {$\begin{aligned}0.3:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+2}\end{aligned}$} (s_1)
+                        edge              node [pos=0.8]       {$\begin{aligned}0.7:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+5}\end{aligned}$} (s_2)                  
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_4)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_3)                    
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state, gray!40] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state, gray!40] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance,gray!40] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a1_chance) edge              node [swap, pos=0.8] {$\begin{aligned}0.3:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+2}\end{aligned}$} (s_1)
+                        edge              node [pos=0.8]       {$\begin{aligned}0.7:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+5}\end{aligned}$} (s_2)                  
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_4)
+            (a2_chance) edge [gray!40]             node   [pos=0.8] {} (s_3)                    
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+% full diagram
+\begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
+  chance/.style={regular polygon,regular polygon sides=4}]
+  \node[state, initial, initial where=above, initial text=$\vdots$] (s_0) {$s_0$};
+  \node[state] (s_1) [below left=5 and 6 of s_0] {$s_1$};
+  \node[state] (s_2) [right=4 of s_1] {$s_2$};
+  \node[state] (s_3) [right=4 of s_2] {$s_3$};
+  \node[state] (s_4) [right=4 of s_3] {$s_4$};
+
+  \node[draw,chance] (a2_chance) [above left=3 and 2 of s_4] {};
+  \node[draw,chance] (a1_chance) [above right=3 and 2 of s_1] {};
+
+  \node (s1_out) [below=2 of s_1] {\textcolor{gray!40}{\vdots}};
+  \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
+  \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
+  \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
+
+  \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
+                  edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
+            (a1_chance) edge              node [swap, pos=0.8] {$\begin{aligned}0.3:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+2}\end{aligned}$} (s_1)
+            edge              node [pos=0.8]       {$\begin{aligned}0.7:\textcolor{serv}{l_3}&\textcolor{serv}{=l_3+1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+5}\end{aligned}$} (s_2)
+            (a2_chance) edge              node   [pos=0.8]           {$\begin{aligned}0.5:\textcolor{loc}{v}&\textcolor{loc}{=2}\\ \textcolor{diff}{d}&\textcolor{diff}{=0}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+3}\end{aligned}$} (s_4)
+            (a2_chance) edge              node   [swap, pos=0.8]     {$\begin{aligned}0.5:\textcolor{loc}{v}&\textcolor{loc}{=2}\\ \textcolor{diff}{d}&\textcolor{diff}{=1}\\ \textcolor{time}{\tau}&\textcolor{time}{=\tau+3}\end{aligned}$} (s_3)
+            (s_1) edge [gray!40]             node        {}      (s1_out)
+            (s_2) edge [gray!40]             node        {}      (s2_out)
+            (s_3) edge [gray!40]             node        {}      (s3_out)
+                  edge [gray!40]             node        {}      (s_2)
+            (s_4) edge [gray!40]             node        {}      (s4_out);
+\end{tikzpicture}
+
+\Huge{
+\begin{tabular}{c|c}
+  State & Action \\\hline
+  $s_0$ & \textcolor{serv}{$a_l$}\\
+  $s_1$ & \textcolor{loc}{$a_e$}\\
+  $s_2$ & \textcolor{loc}{$a_e$}\\
+  $s_3$ & \textcolor{serv}{$a_l$}\\
+  $s_4$ & \textcolor{serv}{$a_l$}\\
+  \vdots & \vdots
+\end{tabular}
+}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:
