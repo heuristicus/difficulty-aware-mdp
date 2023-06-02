@@ -8,10 +8,10 @@
 \usetikzlibrary{automata,positioning, shapes.geometric, bending, calc, external}
 \tikzexternalize
 \tikzset{external/force remake}
-\definecolor{loc}{rgb}{0.06667, 0.46667, 0.20000}
-\definecolor{diff}{rgb}{0.53333, 0.80000, 0.93333}
-\definecolor{serv}{rgb}{0.80000, 0.40000, 0.46667}
-\definecolor{time}{rgb}{0.53333, 0.13333, 0.33333}
+\definecolor{loc}{rgb}{0.90196, 0.62353, 0.00000}
+\definecolor{diff}{rgb}{0.00000, 0.61961, 0.45098}
+\definecolor{serv}{rgb}{0.00000, 0.44706, 0.69804}
+\definecolor{time}{rgb}{0.83529, 0.36863, 0.00000}
 
 
 \begin{document}
@@ -22,7 +22,12 @@ $s=(v_i=2, l_1=1, l_2=0, l_3=0,d_i=2,\tau=5)$
 
 {\Huge{$s=(\textcolor{loc}{v}, \textcolor{serv}{l_1, l_2, l_3},\textcolor{diff}{d},\textcolor{time}{\tau})$}}
 
-{\Huge{$s=(\textcolor{loc}{v}, \textcolor{serv}{l_1, \cdots, l_n},\textcolor{diff}{d},\textcolor{time}{\tau})$}}
+{\Huge{$s=(\textcolor{loc}{v}, \textcolor{serv}{l_1, \cdots,
+      l_n},\textcolor{diff}{d},\textcolor{time}{\tau})$}}
+
+{\Huge $D=I\cdot \Delta t$}
+
+{\Huge $I=\frac{P}{4\pi r^2}$}
 
 % nodes only
 \begin{tikzpicture}[shorten >=1pt,node distance=5cm,on grid,auto,
@@ -59,7 +64,7 @@ $s=(v_i=2, l_1=1, l_2=0, l_3=0,d_i=2,\tau=5)$
   \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
   \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
 
-  \node (texts0) [below left=3 and 2 of s_0] {\large{$s_0=(\textcolor{loc}{v=3}, \textcolor{serv}{l_1=2, l_2=1, l_3=0},\textcolor{diff}{d=1},\textcolor{time}{\tau=15})$}};
+  \node (texts0) [below left=3 and 2 of s_0] {\large{$s_0=(\textcolor{loc}{v=3}, \textcolor{serv}{l_1=1, l_2=2, l_3=0},\textcolor{diff}{d=1},\textcolor{time}{\tau=15})$}};
 
     \path[->]
             (s_1) edge [gray!40]             node        {}      (s1_out)
@@ -221,7 +226,7 @@ $s=(v_i=2, l_1=1, l_2=0, l_3=0,d_i=2,\tau=5)$
   \node (s2_out) [below=2 of s_2] {\textcolor{gray!40}{\vdots}};
   \node (s3_out) [below=2 of s_3] {\textcolor{gray!40}{\vdots}};
   \node (s4_out) [below=2 of s_4] {\textcolor{gray!40}{\vdots}};
-  \node (texts4) [below left=3 and 2 of s_0] {\large{$s_4=(\textcolor{loc}{v=2}, \textcolor{serv}{l_1=2, l_2=1, l_3=0},\textcolor{diff}{d=0},\textcolor{time}{\tau=18})$}};
+  \node (texts4) [below left=3 and 2 of s_0] {\large{$s_4=(\textcolor{loc}{v=2}, \textcolor{serv}{l_1=1, l_2=2, l_3=0},\textcolor{diff}{d=0},\textcolor{time}{\tau=18})$}};
 
   \path[->] (s_0) edge              node [swap] {\large\textcolor{serv}{$a_l$}} (a1_chance)
                   edge              node        {\large\textcolor{loc}{$a_e$}} (a2_chance)
